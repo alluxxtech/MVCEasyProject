@@ -10,7 +10,7 @@ namespace MVCEasyProject.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "Enter new product name12")]
+        [Required(ErrorMessage = "Enter new product name123")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Enter product company1")]
         public string Company { get; set; }
