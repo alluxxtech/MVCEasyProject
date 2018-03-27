@@ -30,8 +30,8 @@ namespace MVCEasyProject.Models
         //[Required(ErrorMessage = "Product decription")]
         public string Description { get; set; }
         [Display(Name = "Price")]
-        //[Required(ErrorMessage = "Enter product price")]
-        public decimal Price { get; set; }
+        [Required(ErrorMessage = "Enter product price")]
+        public int Price { get; set; }
         [Display(Name = "InStock")]
         //[Required(ErrorMessage = "Enter if product in stock")]
         public bool InStock { get; set; }
@@ -39,6 +39,7 @@ namespace MVCEasyProject.Models
         //[Required(ErrorMessage = "Choose product category")]
         public int CategoryId { get; set; }
     }
+
     public class DetailsProductViewModel
     {
         [HiddenInput(DisplayValue = false)]
@@ -55,5 +56,22 @@ namespace MVCEasyProject.Models
         public bool InStock { get; set; }
         [Display(Name = "Category Name")]
         public string CategoryName { get; set; }
+    }
+    public class EditProductViewModel
+    {
+        [HiddenInput(DisplayValue = false)]
+        public int Id { get; set; }
+        [Display(Name = "Product Name")]
+        public string Name { get; set; }
+        [Display(Name = "Company Name")]
+        public string Company { get; set; }
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+        [Display(Name = "Price")]
+        public int Price { get; set; }
+        [Display(Name = "Product InStock")]
+        public bool InStock { get; set; }
+        [Display(Name = "Category Name")]
+        public int? CategoryId { get; set; }
     }
 }

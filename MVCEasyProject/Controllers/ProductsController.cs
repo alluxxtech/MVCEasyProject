@@ -57,8 +57,13 @@ namespace MVCEasyProject.Controllers
         // GET: Products/Create
         public ActionResult Create()
         {
+            CreateProductViewModel model = new CreateProductViewModel
+            {
+                Price = 0
+            };
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
-            return View();
+           
+            return View(model);
         }
 
         // POST: Products/Create
@@ -89,36 +94,51 @@ namespace MVCEasyProject.Controllers
         }
 
         // GET: Products/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
+            var product = db.Products.SingleOrDefault(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            EditProductViewModel model = new EditProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Company = product.Company,
+                Description = product.Description,
+                Price = (int)product.Price,
+                InStock = product.InStock,
+                CategoryId = product.CategoryId
+            };
+                        
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", model.CategoryId);
+            return View(model);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Company,Description,Price,InStock,CategoryId")] Product product)
+        public ActionResult Edit(EditProductViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var product = new Product
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Company = model.Company,
+                    Description = model.Description,
+                    Price = model.Price,
+                    InStock = model.InStock,
+                    CategoryId = model.CategoryId,
+                    Category = db.Categories.SingleOrDefault(c => c.Id == model.CategoryId)                   
+                }; 
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", model.CategoryId);
+            return View(model);
         }
 
         // GET: Products/Delete/5
